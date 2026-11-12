@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -20,17 +19,17 @@
 
     <label class="search-box">
       <span>⌕</span>
-      <input type="search" placeholder="Pesquisar pessoas, assuntos..." aria-label="Pesquisar">
+      <input id="searchInput" type="search" placeholder="Pesquisar pessoas, assuntos..." aria-label="Pesquisar pessoas e publicações">
       <kbd>⌘ K</kbd>
     </label>
 
     <div class="top-actions">
-      <button class="icon-button notification-button" aria-label="Notificações" id="notificationButton">♧<i></i></button>
-      <div class="top-profile">
+      <button type="button" class="icon-button notification-button" aria-label="Notificações" id="notificationButton">♧<i></i></button>
+      <button type="button" class="top-profile profile-trigger" id="profileButton" aria-label="Abrir meu perfil">
         <img src="https://i.pravatar.cc/100?img=47" alt="Foto de perfil de Alex">
         <span>Alex Morgan</span>
         <span class="chevron">⌄</span>
-      </div>
+      </button>
     </div>
   </header>
 
@@ -71,7 +70,7 @@
           <h1>Olá, Alex! <span>✦</span></h1>
           <p>Veja o que está acontecendo na sua comunidade.</p>
         </div>
-        <button class="primary-button" id="jumpToPost">＋ Criar publicação</button>
+        <button type="button" class="primary-button" id="jumpToPost">＋ Criar publicação</button>
       </section>
 
       <section class="stories-section">
@@ -83,27 +82,27 @@
           <a href="#explorar">Ver todos →</a>
         </div>
         <div class="stories">
-          <button class="story add-story" data-story="Seu momento">
+          <button type="button" class="story add-story" data-story="Seu momento">
             <span class="story-photo"><img src="https://i.pravatar.cc/120?img=47" alt="Seu perfil"><b>＋</b></span>
             <span>Seu momento</span>
           </button>
-          <button class="story" data-story="Mariana">
-            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=女" onerror="this.src='https://i.pravatar.cc/120?img=5'" alt="Mariana"></span>
+          <button type="button" class="story" data-story="Mariana">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=5" alt="Mariana"></span>
             <span>Mariana</span>
           </button>
-          <button class="story" data-story="Lucas">
+          <button type="button" class="story" data-story="Lucas">
             <span class="story-photo"><img src="https://i.pravatar.cc/120?img=12" alt="Lucas"></span>
             <span>Lucas</span>
           </button>
-          <button class="story" data-story="Sofia">
+          <button type="button" class="story" data-story="Sofia">
             <span class="story-photo"><img src="https://i.pravatar.cc/120?img=44" alt="Sofia"></span>
             <span>Sofia</span>
           </button>
-          <button class="story" data-story="Gabriel">
+          <button type="button" class="story" data-story="Gabriel">
             <span class="story-photo"><img src="https://i.pravatar.cc/120?img=13" alt="Gabriel"></span>
             <span>Gabriel</span>
           </button>
-          <button class="story" data-story="Isabela">
+          <button type="button" class="story" data-story="Isabela">
             <span class="story-photo"><img src="https://i.pravatar.cc/120?img=32" alt="Isabela"></span>
             <span>Isabela</span>
           </button>
@@ -121,7 +120,7 @@
             <button type="button" class="tool-button" id="feelingTool">☺ <span>Sentimento</span></button>
             <input type="file" id="photoInput" accept="image/*" hidden>
           </div>
-          <button class="primary-button publish-button" id="publishButton">Publicar <span>→</span></button>
+          <button type="button" class="primary-button publish-button" id="publishButton">Publicar <span>→</span></button>
         </div>
         <div id="imagePreview" class="image-preview"></div>
       </section>
@@ -146,15 +145,15 @@
                 <strong>Mariana Costa <span class="verified">✓</span></strong>
                 <span>@marianacosta · há 20 minutos</span>
               </div>
-              <button class="more-button" aria-label="Mais opções">•••</button>
+              <button type="button" class="more-button" aria-label="Mais opções">•••</button>
             </div>
             <p class="post-text">Às vezes, tudo o que precisamos é de um lugar tranquilo, um pouco de natureza e tempo para aproveitar as pequenas coisas. 🌿</p>
             <img class="post-image" src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85" alt="Paisagem de montanhas refletidas em um lago">
-            <div class="post-stats"><span class="like-summary">♥ 128 curtidas</span><span>18 comentários</span></div>
+            <div class="post-stats"><span class="like-summary">♥ 128 curtidas</span><span class="comment-count">18 comentários</span></div>
             <div class="post-actions">
-              <button class="action-button like-button">♡ <span>Curtir</span></button>
-              <button class="action-button comment-button">♧ <span>Comentar</span></button>
-              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+              <button type="button" class="action-button like-button">♡ <span>Curtir</span></button>
+              <button type="button" class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button type="button" class="action-button share-button">↗ <span>Compartilhar</span></button>
             </div>
             <div class="comments-area" hidden>
               <div class="sample-comment"><strong>Lucas:</strong> Que lugar incrível! 😍</div>
@@ -169,7 +168,7 @@
                 <strong>Lucas Almeida</strong>
                 <span>@lucasalmeida · há 1 hora</span>
               </div>
-              <button class="more-button" aria-label="Mais opções">•••</button>
+              <button type="button" class="more-button" aria-label="Mais opções">•••</button>
             </div>
             <p class="post-text">Projeto novo saindo do papel! Depois de muito planejamento, finalmente consegui tirar essa ideia do papel. O primeiro passo é sempre o mais importante. 🚀</p>
             <div class="post-image graphic-post">
@@ -177,11 +176,11 @@
               <span>IDEIAS QUE<br><strong>TRANSFORMAM.</strong></span>
               <small>CRIATIVIDADE · CONEXÃO · FUTURO</small>
             </div>
-            <div class="post-stats"><span class="like-summary">♥ 86 curtidas</span><span>12 comentários</span></div>
+            <div class="post-stats"><span class="like-summary">♥ 86 curtidas</span><span class="comment-count">12 comentários</span></div>
             <div class="post-actions">
-              <button class="action-button like-button">♡ <span>Curtir</span></button>
-              <button class="action-button comment-button">♧ <span>Comentar</span></button>
-              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+              <button type="button" class="action-button like-button">♡ <span>Curtir</span></button>
+              <button type="button" class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button type="button" class="action-button share-button">↗ <span>Compartilhar</span></button>
             </div>
             <div class="comments-area" hidden>
               <div class="sample-comment"><strong>Sofia:</strong> Parabéns pelo projeto! 👏</div>
@@ -196,14 +195,14 @@
                 <strong>Sofia Martins <span class="verified">✓</span></strong>
                 <span>@sofiamartins · há 3 horas</span>
               </div>
-              <button class="more-button" aria-label="Mais opções">•••</button>
+              <button type="button" class="more-button" aria-label="Mais opções">•••</button>
             </div>
             <p class="post-text">Um lembrete para hoje: não compare o seu começo com o meio da jornada de outra pessoa. Cada conquista tem seu próprio tempo. 💜</p>
-            <div class="post-stats"><span class="like-summary">♥ 204 curtidas</span><span>31 comentários</span></div>
+            <div class="post-stats"><span class="like-summary">♥ 204 curtidas</span><span class="comment-count">31 comentários</span></div>
             <div class="post-actions">
-              <button class="action-button like-button">♡ <span>Curtir</span></button>
-              <button class="action-button comment-button">♧ <span>Comentar</span></button>
-              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+              <button type="button" class="action-button like-button">♡ <span>Curtir</span></button>
+              <button type="button" class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button type="button" class="action-button share-button">↗ <span>Compartilhar</span></button>
             </div>
             <div class="comments-area" hidden>
               <div class="sample-comment"><strong>Mariana:</strong> Precisava ler isso hoje! 💜</div>
@@ -220,17 +219,17 @@
         <div class="suggestion">
           <img src="https://i.pravatar.cc/100?img=32" alt="Isabela">
           <div><strong>Isabela Rocha</strong><span>@isabelarocha</span></div>
-          <button class="follow-button">＋</button>
+          <button type="button" class="follow-button">＋</button>
         </div>
         <div class="suggestion">
           <img src="https://i.pravatar.cc/100?img=13" alt="Gabriel">
           <div><strong>Gabriel Santos</strong><span>@gabrielsantos</span></div>
-          <button class="follow-button">＋</button>
+          <button type="button" class="follow-button">＋</button>
         </div>
         <div class="suggestion">
           <img src="https://i.pravatar.cc/100?img=68" alt="Beatriz">
           <div><strong>Beatriz Lima</strong><span>@beatrizlima</span></div>
-          <button class="follow-button">＋</button>
+          <button type="button" class="follow-button">＋</button>
         </div>
       </section>
 
@@ -256,6 +255,7 @@
     </aside>
   </div>
 
+  <div id="modalRoot"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
