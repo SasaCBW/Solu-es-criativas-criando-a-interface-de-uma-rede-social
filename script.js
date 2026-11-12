@@ -12,7 +12,10 @@ const searchInput = document.getElementById("searchInput");
 let selectedImage = "";
 let toastTimer;
 let currentFilter = "recentes";
-const savedPosts = new Set(JSON.parse(localStorage.getItem("connectSavedPosts") || "[]"));
+
+const savedPosts = new Set(
+  JSON.parse(localStorage.getItem("connectSavedPosts") || "[]")
+);
 
 [...postsContainer.querySelectorAll(".post")].forEach((post, index) => {
   if (!post.dataset.postId) post.dataset.postId = `sample-${index + 1}`;
@@ -22,8 +25,12 @@ const savedPosts = new Set(JSON.parse(localStorage.getItem("connectSavedPosts") 
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
+
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2600);
 }
 
 function escapeHTML(text) {
@@ -116,7 +123,9 @@ photoInput.addEventListener("change", () => {
     imagePreview.innerHTML = `
       <div class="preview-wrap">
         <img src="${selectedImage}" alt="Prévia da imagem selecionada">
-        <button type="button" id="removePreview" class="remove-preview">Remover foto ×</button>
+        <button type="button" id="removePreview" class="remove-preview">
+          Remover foto ×
+        </button>
       </div>`;
 
     document.getElementById("removePreview").addEventListener("click", () => {
@@ -154,7 +163,9 @@ function updateCommentCount(post, amount = 1) {
 
   if (!counter) return;
 
-  const current = Number((counter.textContent.match(/\d+/) || [0])[0]);
+  const current = Number(
+    (counter.textContent.match(/\d+/) || [0])[0]
+  );
 
   counter.textContent = `${current + amount} comentários`;
 }
@@ -165,7 +176,8 @@ function makePost(text, image) {
   post.className = "post card";
   post.dataset.likes = "0";
   post.dataset.created = String(Date.now());
-  post.dataset.postId = `post-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  post.dataset.postId =
+    `post-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
   post.innerHTML = `
     <div class="post-header">
@@ -250,7 +262,8 @@ postsContainer.addEventListener("click", async event => {
 
     post.dataset.likes = String(next);
 
-    button.innerHTML = `${liked ? "♥" : "♡"} <span>${liked ? "Curtido" : "Curtir"}</span>`;
+    button.innerHTML =
+      `${liked ? "♥" : "♡"} <span>${liked ? "Curtido" : "Curtir"}</span>`;
 
     const summary = post.querySelector(".like-summary");
 
@@ -303,7 +316,9 @@ postsContainer.addEventListener("click", async event => {
     const isSaved = savedPosts.has(id);
 
     openModal("Opções da publicação", `
-      <p class="modal-description">Escolha o que deseja fazer com esta publicação.</p>
+      <p class="modal-description">
+        Escolha o que deseja fazer com esta publicação.
+      </p>
 
       <button type="button" class="modal-action" id="savePostAction">
         ${isSaved ? "★ Remover dos salvos" : "☆ Salvar publicação"}
@@ -431,7 +446,9 @@ document.querySelectorAll(".story").forEach(story => {
 
     if (name === "Seu momento") {
       openModal("Adicionar momento", `
-        <p class="modal-description">Escolha uma imagem para criar seu momento.</p>
+        <p class="modal-description">
+          Escolha uma imagem para criar seu momento.
+        </p>
 
         <button type="button" class="modal-primary" id="storyUploadButton">
           Escolher foto
@@ -836,4 +853,449 @@ postsContainer.addEventListener("click", event => {
       `<img class="modal-image" src="${image.src}" alt="${escapeHTML(image.alt)}">`
     );
   }
+});
+
+/* CONNECT BOT HUB — personagens virtuais com respostas automáticas locais */
+
+const connectBots = [
+  {
+    id: "luna",
+    name: "Luna",
+    handle: "@luna_conecta",
+    avatar: "https://i.pravatar.cc/100?img=47",
+    about: "Gosta de conversar sobre o dia a dia, amizades e novidades.",
+    style: "gentle"
+  },
+  {
+    id: "theo",
+    name: "Theo",
+    handle: "@theo.tech",
+    avatar: "https://i.pravatar.cc/100?img=12",
+    about: "Curte tecnologia, jogos, programação e ideias novas.",
+    style: "tech"
+  },
+  {
+    id: "maya",
+    name: "Maya",
+    handle: "@maya.cria",
+    avatar: "https://i.pravatar.cc/100?img=44",
+    about: "Ama música, fotografia, criatividade e arte.",
+    style: "creative"
+  },
+  {
+    id: "nico",
+    name: "Nico",
+    handle: "@nico_online",
+    avatar: "https://i.pravatar.cc/100?img=13",
+    about: "Bem-humorado, curioso e sempre pronto para um papo.",
+    style: "fun"
+  }
+];
+
+const botStorageKey = "connectBotChatsV1";
+
+let botChats = {};
+
+try {
+  botChats = JSON.parse(localStorage.getItem(botStorageKey) || "{}");
+} catch {
+  botChats = {};
+}
+
+let activeBotId = null;
+
+function saveBotChats() {
+  try {
+    localStorage.setItem(botStorageKey, JSON.stringify(botChats));
+  } catch {
+    showToast("O navegador não conseguiu salvar o histórico desta conversa.");
+  }
+}
+
+function getBot(id) {
+  return connectBots.find(bot => bot.id === id) || connectBots[0];
+}
+
+function botTime() {
+  return new Date().toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function ensureBotChat(id) {
+  if (!Array.isArray(botChats[id])) {
+    const bot = getBot(id);
+
+    botChats[id] = [
+      {
+        from: "bot",
+        text: `Oi! Eu sou ${bot.name}, um assistente virtual do Connect. 😊 ${bot.about} Sobre o que você quer conversar?`,
+        time: botTime()
+      }
+    ];
+
+    saveBotChats();
+  }
+
+  return botChats[id];
+}
+
+function botReply(bot, message) {
+  const text = message.toLocaleLowerCase("pt-BR");
+
+  const has = (...words) => words.some(word => text.includes(word));
+
+  if (has("oi", "olá", "ola", "e aí", "eai", "bom dia", "boa tarde", "boa noite")) {
+    const greetings = {
+      luna: [
+        "Oii! Que bom receber sua mensagem! Como está sendo seu dia? 🌷",
+        "Olá! 😊 Me conta, o que aconteceu de interessante hoje?"
+      ],
+
+      theo: [
+        "Fala! Tudo certo por aí? Qual assunto vamos explorar? 💻",
+        "Opa! Online e pronto para trocar ideias. O que manda?"
+      ],
+
+      maya: [
+        "Oii! ✨ Que bom ter você por aqui. Como estão as coisas?",
+        "Oláá! Me conta uma novidade ou uma ideia que está na sua cabeça! 🎨"
+      ],
+
+      nico: [
+        "E aíí! 😄 Cheguei! Qual é a boa de hoje?",
+        "Opa, tudo tranquilo? Bora conversar!"
+      ]
+    };
+
+    const options = greetings[bot.id];
+
+    return options[Math.floor(Math.random() * options.length)];
+  }
+
+  if (has("triste", "chatead", "difícil", "cansad", "ansios", "preocup")) {
+    return "Poxa, sinto muito que as coisas não estejam tão leves agora. 💜 Se quiser, pode me contar um pouco mais. Posso te ouvir e pensar em ideias com você.";
+  }
+
+  if (has("feliz", "legal", "consegui", "conquista", "vitória", "vitoria", "passei")) {
+    return "Aaa, que notícia boa! 🎉 Você merece comemorar suas conquistas. O que foi que aconteceu?";
+  }
+
+  if (has("escola", "prova", "estudo", "trabalho", "aula", "professor")) {
+    return bot.id === "theo"
+      ? "Podemos organizar isso por partes! Qual é a matéria ou o assunto? 🧠"
+      : "Boa! Estudar fica mais fácil quando a gente divide em etapas. Qual matéria está ocupando seu tempo? 📚";
+  }
+
+  if (has("jogo", "game", "godot", "program", "código", "codigo", "site", "html", "javascript")) {
+    return "Esse assunto é muito interessante! 💻 Você está criando alguma coisa ou quer aprender algo novo?";
+  }
+
+  if (has("música", "musica", "filme", "série", "serie", "livro", "foto", "fotografia", "desenho")) {
+    return "Adoro quando a conversa vai para esse lado! ✨ O que você tem escutado, assistido ou criado ultimamente?";
+  }
+
+  if (has("obrigad", "valeu")) {
+    return "Imagina! 😊 Foi muito bom conversar com você. Pode me chamar quando quiser trocar mais ideias.";
+  }
+
+  if (has("quem é você", "quem e voce", "é robô", "e robo", "robô", "robot", "ia")) {
+    return `Eu sou ${bot.name}, um personagem virtual do Connect. Não sou uma pessoa real: respondo automaticamente por meio de regras de conversa programadas no site. 🤖`;
+  }
+
+  if (has("conselho", "ajuda", "opinião", "opiniao", "não sei", "nao sei")) {
+    return "Vamos pensar juntos! Me explica um pouquinho melhor a situação e o que você gostaria que acontecesse. 💜";
+  }
+
+  const replies = {
+    luna: [
+      "Entendi! 💜 E como você se sentiu com isso?",
+      "Que interessante! Me conta mais, quero entender direitinho. 😊",
+      "Faz sentido. O que você acha que vai fazer a partir daqui?"
+    ],
+
+    theo: [
+      "Boa questão! 🤔 Dá para olhar por alguns ângulos. Qual parte você quer explorar primeiro?",
+      "Interessante! Se a gente dividir essa ideia em etapas, fica mais fácil. Qual é o próximo detalhe?",
+      "Curti o assunto! Tem algum exemplo disso que aconteceu com você?"
+    ],
+
+    maya: [
+      "Isso me deu uma ideia! ✨ Como você imaginaria essa situação de um jeito criativo?",
+      "Gostei de saber disso! Tem algum detalhe que você ainda não contou? 🎨",
+      "Às vezes uma conversa abre caminhos novos. O que mais passou pela sua cabeça?"
+    ],
+
+    nico: [
+      "Hahaha, entendi! 😄 E aí, qual foi a melhor parte?",
+      "Aí sim! Conta o resto, agora fiquei curioso. 👀",
+      "Boa! Se essa história fosse um post, qual seria a legenda? 😂"
+    ]
+  };
+
+  const options = replies[bot.id];
+
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+function renderBotChat(id) {
+  const bot = getBot(id);
+  const messages = ensureBotChat(id);
+
+  activeBotId = id;
+
+  openModal(`Conversa com ${bot.name}`, `
+    <div class="bot-chat">
+
+      <div class="bot-chat-head">
+        <img src="${bot.avatar}" alt="">
+
+        <div>
+          <strong>
+            ${bot.name}
+            <span class="bot-label">ROBÔ</span>
+          </strong>
+
+          <small>● Assistente virtual online</small>
+        </div>
+      </div>
+
+      <div class="bot-chat-log" id="botChatLog">
+        ${messages.map(message => `
+          <div class="bot-bubble ${message.from === "user" ? "mine" : "theirs"}">
+            ${escapeHTML(message.text)}
+            <span class="bot-time">${escapeHTML(message.time || "")}</span>
+          </div>
+        `).join("")}
+      </div>
+
+      <form class="bot-send-form" id="botSendForm">
+        <input
+          id="botMessageInput"
+          maxlength="500"
+          autocomplete="off"
+          placeholder="Escreva uma mensagem para ${bot.name}..."
+        >
+
+        <button type="submit">Enviar</button>
+      </form>
+
+    </div>
+
+    <p class="bot-disclaimer">
+      Você está conversando com um personagem automatizado.
+      As mensagens ficam salvas neste navegador.
+    </p>
+  `);
+
+  const log = document.getElementById("botChatLog");
+
+  log.scrollTop = log.scrollHeight;
+
+  document.getElementById("botMessageInput").focus();
+
+  document.getElementById("botSendForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const input = document.getElementById("botMessageInput");
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    messages.push({
+      from: "user",
+      text: message,
+      time: botTime()
+    });
+
+    saveBotChats();
+
+    log.insertAdjacentHTML(
+      "beforeend",
+      `
+        <div class="bot-bubble mine">
+          ${escapeHTML(message)}
+          <span class="bot-time">${botTime()}</span>
+        </div>
+      `
+    );
+
+    input.value = "";
+
+    log.insertAdjacentHTML(
+      "beforeend",
+      `<div class="bot-typing" id="botTyping">${bot.name} está digitando...</div>`
+    );
+
+    log.scrollTop = log.scrollHeight;
+
+    const reply = botReply(bot, message);
+
+    setTimeout(() => {
+      const typing = document.getElementById("botTyping");
+
+      if (typing) typing.remove();
+
+      messages.push({
+        from: "bot",
+        text: reply,
+        time: botTime()
+      });
+
+      saveBotChats();
+
+      if (document.getElementById("botChatLog")) {
+        log.insertAdjacentHTML(
+          "beforeend",
+          `
+            <div class="bot-bubble theirs">
+              ${escapeHTML(reply)}
+              <span class="bot-time">${botTime()}</span>
+            </div>
+          `
+        );
+
+        log.scrollTop = log.scrollHeight;
+      }
+    }, 900 + Math.random() * 900);
+  });
+}
+
+function openBotDirectory() {
+  openModal("Mensagens · Connect", `
+    <p class="modal-description">
+      Escolha um assistente virtual para iniciar ou continuar uma conversa.
+    </p>
+
+    <div class="bot-list">
+      ${connectBots.map(bot => `
+        <button type="button" class="bot-card" data-bot-id="${bot.id}">
+          <img src="${bot.avatar}" alt="">
+
+          <span class="bot-card-info">
+            <strong>
+              ${bot.name}
+              <span class="bot-label">ROBÔ</span>
+            </strong>
+
+            <span>${bot.about}</span>
+          </span>
+
+          <span aria-hidden="true">›</span>
+        </button>
+      `).join("")}
+    </div>
+
+    <p class="bot-disclaimer">
+      Os perfis desta lista são personagens automatizados, não usuários humanos.
+    </p>
+  `);
+
+  modalRoot.querySelectorAll("[data-bot-id]").forEach(button => {
+    button.addEventListener("click", () => {
+      renderBotChat(button.dataset.botId);
+    });
+  });
+}
+
+const botLauncher = document.createElement("button");
+
+botLauncher.type = "button";
+botLauncher.className = "bot-launcher";
+
+botLauncher.innerHTML = `
+  <span class="bot-launcher-dot"></span>
+  <span>Conversar com robôs</span> 💬
+`;
+
+botLauncher.addEventListener("click", openBotDirectory);
+
+document.body.appendChild(botLauncher);
+
+/* Substitui o atalho antigo de mensagens pela caixa de conversa com os bots. */
+document.querySelectorAll('.nav-link[data-nav="mensagens"]').forEach(link => {
+  link.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    document.querySelectorAll(".nav-link").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    link.classList.add("active");
+
+    openBotDirectory();
+  }, true);
+});
+
+/* Os assistentes podem reagir às novas publicações feitas pelo usuário. */
+const botPostObserver = new MutationObserver(records => {
+  records.forEach(record => {
+    record.addedNodes.forEach(node => {
+      if (!(node instanceof HTMLElement) || !node.classList.contains("post")) return;
+
+      if (!node.querySelector(".post-author strong")?.textContent.includes("Alex")) return;
+
+      if (node.dataset.botReacted === "true") return;
+
+      node.dataset.botReacted = "true";
+
+      const bot = connectBots[
+        Math.floor(Math.random() * connectBots.length)
+      ];
+
+      setTimeout(() => {
+        if (!node.isConnected) return;
+
+        const likeButton = node.querySelector(".like-button");
+
+        if (likeButton && !likeButton.classList.contains("liked")) {
+          const count = Number(node.dataset.likes || 0) + 1;
+
+          node.dataset.likes = String(count);
+
+          const summary = node.querySelector(".like-summary");
+
+          if (summary) {
+            summary.textContent = `♥ ${count} curtidas`;
+          }
+        }
+
+        const commentArea = node.querySelector(".comments-area");
+
+        if (commentArea) {
+          commentArea.hidden = false;
+
+          const line = document.createElement("div");
+
+          line.className = "sample-comment";
+
+          line.innerHTML = `
+            <strong>
+              ${bot.name}
+              <span class="bot-label">ROBÔ</span>:
+            </strong>
+            ${
+              bot.id === "luna"
+                ? "Que bom que você compartilhou isso com a gente! 💜"
+                : bot.id === "theo"
+                  ? "Ideia interessante! Gostei de ver essa publicação. 🚀"
+                  : bot.id === "maya"
+                    ? "Adorei a energia dessa publicação! ✨"
+                    : "Aí sim! Já deixou o feed mais interessante. 😄"
+            }
+          `;
+
+          commentArea.querySelector(".comment-list")?.appendChild(line);
+
+          updateCommentCount(node);
+        }
+      }, 2200 + Math.random() * 1800);
+    });
+  });
+});
+
+botPostObserver.observe(postsContainer, {
+  childList: true
 });
