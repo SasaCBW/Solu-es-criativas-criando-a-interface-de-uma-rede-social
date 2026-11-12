@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connect - uma rede social criada para conectar pessoas e compartilhar ideias.">
+  <title>Connect | Rede Social</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Connect início">
+      <span class="brand-icon">C</span>
+      <span>connect<span class="brand-dot">.</span></span>
+    </a>
+
+    <label class="search-box">
+      <span>⌕</span>
+      <input type="search" placeholder="Pesquisar pessoas, assuntos..." aria-label="Pesquisar">
+      <kbd>⌘ K</kbd>
+    </label>
+
+    <div class="top-actions">
+      <button class="icon-button notification-button" aria-label="Notificações" id="notificationButton">♧<i></i></button>
+      <div class="top-profile">
+        <img src="https://i.pravatar.cc/100?img=47" alt="Foto de perfil de Alex">
+        <span>Alex Morgan</span>
+        <span class="chevron">⌄</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-label">MENU PRINCIPAL</div>
+      <nav class="main-nav" aria-label="Menu principal">
+        <a href="#inicio" class="nav-link active" data-nav="inicio"><span>⌂</span> Início</a>
+        <a href="#explorar" class="nav-link" data-nav="explorar"><span>⌕</span> Explorar</a>
+        <a href="#mensagens" class="nav-link" data-nav="mensagens"><span>✉</span> Mensagens <b class="nav-count">3</b></a>
+        <a href="#salvos" class="nav-link" data-nav="salvos"><span>♧</span> Salvos</a>
+      </nav>
+
+      <div class="sidebar-label second-label">PESSOAL</div>
+      <nav class="main-nav">
+        <a href="#perfil" class="nav-link" data-nav="perfil"><span>♙</span> Meu perfil</a>
+        <a href="#configuracoes" class="nav-link" data-nav="configuracoes"><span>⚙</span> Configurações</a>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-icon">✦</div>
+        <h3>Compartilhe suas ideias!</h3>
+        <p>Inspire pessoas com aquilo que você tem a dizer.</p>
+        <a href="#criar-publicacao">Criar publicação <span>→</span></a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <span class="online-dot"></span>
+        Comunidade conectada
+        <small>© 2025 Connect</small>
+      </div>
+    </aside>
+
+    <main class="feed" id="inicio">
+      <section class="welcome">
+        <div>
+          <span class="eyebrow">QUARTA-FEIRA, 12 DE NOVEMBRO</span>
+          <h1>Olá, Alex! <span>✦</span></h1>
+          <p>Veja o que está acontecendo na sua comunidade.</p>
+        </div>
+        <button class="primary-button" id="jumpToPost">＋ Criar publicação</button>
+      </section>
+
+      <section class="stories-section">
+        <div class="section-heading">
+          <div>
+            <h2>Momentos</h2>
+            <p>Um pouco do dia das pessoas</p>
+          </div>
+          <a href="#explorar">Ver todos →</a>
+        </div>
+        <div class="stories">
+          <button class="story add-story" data-story="Seu momento">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=47" alt="Seu perfil"><b>＋</b></span>
+            <span>Seu momento</span>
+          </button>
+          <button class="story" data-story="Mariana">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=女" onerror="this.src='https://i.pravatar.cc/120?img=5'" alt="Mariana"></span>
+            <span>Mariana</span>
+          </button>
+          <button class="story" data-story="Lucas">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=12" alt="Lucas"></span>
+            <span>Lucas</span>
+          </button>
+          <button class="story" data-story="Sofia">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=44" alt="Sofia"></span>
+            <span>Sofia</span>
+          </button>
+          <button class="story" data-story="Gabriel">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=13" alt="Gabriel"></span>
+            <span>Gabriel</span>
+          </button>
+          <button class="story" data-story="Isabela">
+            <span class="story-photo"><img src="https://i.pravatar.cc/120?img=32" alt="Isabela"></span>
+            <span>Isabela</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="composer card" id="criar-publicacao">
+        <div class="composer-top">
+          <img class="avatar" src="https://i.pravatar.cc/100?img=47" alt="Seu perfil">
+          <input id="postInput" type="text" maxlength="280" placeholder="O que você gostaria de compartilhar?">
+        </div>
+        <div class="composer-bottom">
+          <div class="composer-tools">
+            <button type="button" class="tool-button" id="photoTool">▧ <span>Foto</span></button>
+            <button type="button" class="tool-button" id="feelingTool">☺ <span>Sentimento</span></button>
+            <input type="file" id="photoInput" accept="image/*" hidden>
+          </div>
+          <button class="primary-button publish-button" id="publishButton">Publicar <span>→</span></button>
+        </div>
+        <div id="imagePreview" class="image-preview"></div>
+      </section>
+
+      <section class="posts-section">
+        <div class="section-heading feed-heading">
+          <div>
+            <h2>Seu feed</h2>
+            <p>Publicações recentes da comunidade</p>
+          </div>
+          <select id="feedFilter" aria-label="Ordenar publicações">
+            <option value="recentes">Mais recentes</option>
+            <option value="populares">Mais populares</option>
+          </select>
+        </div>
+
+        <div id="postsContainer">
+          <article class="post card" data-likes="128">
+            <div class="post-header">
+              <img class="avatar" src="https://i.pravatar.cc/100?img=5" alt="Mariana Costa">
+              <div class="post-author">
+                <strong>Mariana Costa <span class="verified">✓</span></strong>
+                <span>@marianacosta · há 20 minutos</span>
+              </div>
+              <button class="more-button" aria-label="Mais opções">•••</button>
+            </div>
+            <p class="post-text">Às vezes, tudo o que precisamos é de um lugar tranquilo, um pouco de natureza e tempo para aproveitar as pequenas coisas. 🌿</p>
+            <img class="post-image" src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85" alt="Paisagem de montanhas refletidas em um lago">
+            <div class="post-stats"><span class="like-summary">♥ 128 curtidas</span><span>18 comentários</span></div>
+            <div class="post-actions">
+              <button class="action-button like-button">♡ <span>Curtir</span></button>
+              <button class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+            </div>
+            <div class="comments-area" hidden>
+              <div class="sample-comment"><strong>Lucas:</strong> Que lugar incrível! 😍</div>
+              <div class="comment-form"><input type="text" placeholder="Escreva um comentário..."><button>Enviar</button></div>
+            </div>
+          </article>
+
+          <article class="post card" data-likes="86">
+            <div class="post-header">
+              <img class="avatar" src="https://i.pravatar.cc/100?img=12" alt="Lucas Almeida">
+              <div class="post-author">
+                <strong>Lucas Almeida</strong>
+                <span>@lucasalmeida · há 1 hora</span>
+              </div>
+              <button class="more-button" aria-label="Mais opções">•••</button>
+            </div>
+            <p class="post-text">Projeto novo saindo do papel! Depois de muito planejamento, finalmente consegui tirar essa ideia do papel. O primeiro passo é sempre o mais importante. 🚀</p>
+            <div class="post-image graphic-post">
+              <span class="graphic-symbol">✳</span>
+              <span>IDEIAS QUE<br><strong>TRANSFORMAM.</strong></span>
+              <small>CRIATIVIDADE · CONEXÃO · FUTURO</small>
+            </div>
+            <div class="post-stats"><span class="like-summary">♥ 86 curtidas</span><span>12 comentários</span></div>
+            <div class="post-actions">
+              <button class="action-button like-button">♡ <span>Curtir</span></button>
+              <button class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+            </div>
+            <div class="comments-area" hidden>
+              <div class="sample-comment"><strong>Sofia:</strong> Parabéns pelo projeto! 👏</div>
+              <div class="comment-form"><input type="text" placeholder="Escreva um comentário..."><button>Enviar</button></div>
+            </div>
+          </article>
+
+          <article class="post card" data-likes="204">
+            <div class="post-header">
+              <img class="avatar" src="https://i.pravatar.cc/100?img=44" alt="Sofia Martins">
+              <div class="post-author">
+                <strong>Sofia Martins <span class="verified">✓</span></strong>
+                <span>@sofiamartins · há 3 horas</span>
+              </div>
+              <button class="more-button" aria-label="Mais opções">•••</button>
+            </div>
+            <p class="post-text">Um lembrete para hoje: não compare o seu começo com o meio da jornada de outra pessoa. Cada conquista tem seu próprio tempo. 💜</p>
+            <div class="post-stats"><span class="like-summary">♥ 204 curtidas</span><span>31 comentários</span></div>
+            <div class="post-actions">
+              <button class="action-button like-button">♡ <span>Curtir</span></button>
+              <button class="action-button comment-button">♧ <span>Comentar</span></button>
+              <button class="action-button share-button">↗ <span>Compartilhar</span></button>
+            </div>
+            <div class="comments-area" hidden>
+              <div class="sample-comment"><strong>Mariana:</strong> Precisava ler isso hoje! 💜</div>
+              <div class="comment-form"><input type="text" placeholder="Escreva um comentário..."><button>Enviar</button></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <section class="right-widget">
+        <div class="widget-heading"><h2>Quem seguir</h2><a href="#explorar">Ver todos</a></div>
+        <div class="suggestion">
+          <img src="https://i.pravatar.cc/100?img=32" alt="Isabela">
+          <div><strong>Isabela Rocha</strong><span>@isabelarocha</span></div>
+          <button class="follow-button">＋</button>
+        </div>
+        <div class="suggestion">
+          <img src="https://i.pravatar.cc/100?img=13" alt="Gabriel">
+          <div><strong>Gabriel Santos</strong><span>@gabrielsantos</span></div>
+          <button class="follow-button">＋</button>
+        </div>
+        <div class="suggestion">
+          <img src="https://i.pravatar.cc/100?img=68" alt="Beatriz">
+          <div><strong>Beatriz Lima</strong><span>@beatrizlima</span></div>
+          <button class="follow-button">＋</button>
+        </div>
+      </section>
+
+      <section class="community-banner">
+        <span class="banner-icon">✦</span>
+        <span class="banner-label">NOSSA COMUNIDADE</span>
+        <h2>Conexões que fazem a diferença.</h2>
+        <p>Compartilhe momentos, descubra ideias e conheça pessoas.</p>
+        <a href="#criar-publicacao">Faça parte →</a>
+      </section>
+
+      <section class="right-widget trends-widget" id="explorar">
+        <div class="widget-heading"><h2>Em alta</h2><span class="trending-icon">↗</span></div>
+        <a class="trend" href="#inicio"><span>01 · Tecnologia</span><strong>#InovaçãoDigital</strong><small>2,4 mil publicações</small></a>
+        <a class="trend" href="#inicio"><span>02 · Criatividade</span><strong>#IdeiasCriativas</strong><small>1,8 mil publicações</small></a>
+        <a class="trend" href="#inicio"><span>03 · Bem-estar</span><strong>#VidaLeve</strong><small>960 publicações</small></a>
+      </section>
+
+      <footer class="right-footer">
+        <a href="#sobre">Sobre</a><a href="#privacidade">Privacidade</a><a href="#ajuda">Ajuda</a>
+        <span>Connect © 2025 · Feito para conectar.</span>
+      </footer>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
